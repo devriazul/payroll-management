@@ -1,17 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\ReportsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,3 +11,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Leave Routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
+    Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
+});
+
+// Reports Routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/reports/leave-history', [ReportsController::class, 'leaveHistory'])->name('reports.leave.history');
+});
+
